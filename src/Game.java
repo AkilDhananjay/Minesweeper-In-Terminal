@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -124,17 +125,24 @@ public class Game {
     }
 
     public static int[] TileSelector() {
-        System.out.print("Enter Row :");
-        int x = scanner.nextInt();
+        int x = 0, y = 0;
+        try {
+            System.out.print("Enter Row :");
+            x = scanner.nextInt();
 
-        if (x > board.length) {
-            System.out.println("Row value can't be greater that board length");
-            TileSelector();
-        }
-        System.out.print("Enter coloumn :");
-        int y = scanner.nextInt();
-        if (y > board[x - 1].length) {
-            System.out.println("Coloumn value can't be greater that board length");
+            if (x > board.length) {
+                System.out.println("Row value can't be greater that board length");
+                TileSelector();
+            }
+            System.out.print("Enter coloumn :");
+            y = scanner.nextInt();
+            if (y > board[x - 1].length) {
+                System.out.println("Coloumn value can't be greater that board length");
+                TileSelector();
+            }
+        } catch (InputMismatchException e) {
+            scanner.next();
+            System.out.println(Color.RED + "Enter a Integer Value" + Color.RESET);
             TileSelector();
         }
         int[] quordinates = { x - 1, y - 1 };
@@ -212,15 +220,26 @@ public class Game {
     }
 
     public static int UserInput(Scanner scanner) {
-        System.out.println("What do you wan to do?");
-        System.out.println();
-        System.out.println("(0) Exit Game");
-        System.out.println("(1) Mine");
-        System.out.println("(2) Place Flag");
-        System.out.println("(3) Remove Flag");
-        System.out.println("(4+) Nothing");
-        System.out.print(":");
-        return scanner.nextInt();
+        boolean correct_value = false;
+        while (!correct_value) {
+            try {
+                System.out.println("What do you wan to do?");
+                System.out.println();
+                System.out.println("(0) Exit Game");
+                System.out.println("(1) Mine");
+                System.out.println("(2) Place Flag");
+                System.out.println("(3) Remove Flag");
+                System.out.println("(4+) Nothing");
+                System.out.print(":");
+                int choice = scanner.nextInt();
+                return choice;
+            } catch (InputMismatchException e) {
+                System.out.println(Color.RED+"Enter a Integer value"+Color.RESET);
+                scanner.next();
+                correct_value = false;
+            }
+        }
+        return 9;
 
     }
 
@@ -231,5 +250,4 @@ public class Game {
         GAME_OVER = true;
     }
 
-    
 }
